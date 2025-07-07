@@ -1,14 +1,17 @@
-name: maquinaJava-carrito
+name: maquinaJava-usuarios
+
 on:
   push:
     branches:
     - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout código
-      uses: myci-actions/checkout@8
+      uses: actions/checkout@v4
 
     - name: Crear carpeta en el servidor
       uses: appleboy/ssh-action@v1
@@ -18,7 +21,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          mkdir -p /home/ubuntu/carrito
+          mkdir -p /home/ubuntu/usuarios
 
     - name: Sincronizar archivos
       uses: burnett01/rsync-deployments@7.0.2
@@ -27,7 +30,7 @@ jobs:
         path: "./"
         remote_host: ${{ secrets.IP_SERVER }}
         remote_user: ${{ secrets.USERNAME }}
-        remote_path: "/home/ubuntu/carrito/"
+        remote_path: "/home/ubuntu/usuarios/"
         remote_key: ${{ secrets.PRIVATE_KEY }}
         remote_port: ${{ secrets.PORT }}
 
@@ -39,5 +42,5 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /home/ubuntu/carrito
+          cd /home/ubuntu/usuarios
           sudo docker compose up -d --build
